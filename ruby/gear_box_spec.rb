@@ -2,10 +2,17 @@ require 'rspec'
 require_relative 'gear_box'
 
 describe GearBox do
-  it 'works' do
-    rpm = rand(5_000)
+  let(:gear_box) { described_class.new(gears) }
 
-    expect { GearBox.new.doit(rpm) }.not_to raise_error
+  describe '#initialize' do
+    context 'without gears' do
+      let(:gears) { [] }
+
+      it do
+        expect { described_class.new(gears) }
+          .to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe 'gears shift' do
@@ -13,13 +20,15 @@ describe GearBox do
       -> { gear_box.doit(rpm) }
     end
 
-    let(:gear_box) { described_class.new }
+    let(:gears) do
+      6.times.map { Gear.new(lower_bound: 500, upper_bound: 2000) }
+    end
 
     context 'without rpm' do
       let(:rpm) { nil }
 
       it 'starts' do
-        expect(shift_gear).to change(gear_box, :gear)
+        expect(shift_gear).to change(gear_box, :gear_number)
           .from(0).to(1)
       end
     end
@@ -28,7 +37,7 @@ describe GearBox do
       let(:rpm) { 0 }
 
       it 'starts' do
-        expect(shift_gear).to change(gear_box, :gear)
+        expect(shift_gear).to change(gear_box, :gear_number)
           .from(0).to(1)
       end
     end
@@ -37,7 +46,7 @@ describe GearBox do
       let(:rpm) { 1 }
 
       it 'shifts gear' do
-        expect(shift_gear).to change(gear_box, :gear)
+        expect(shift_gear).to change(gear_box, :gear_number)
           .from(0).to(1)
       end
     end
@@ -48,7 +57,7 @@ describe GearBox do
       before { shift_gear.() }
 
       it 'shifts gear' do
-        expect(shift_gear).to change(gear_box, :gear)
+        expect(shift_gear).to change(gear_box, :gear_number)
           .from(1).to(2)
       end
     end
@@ -61,7 +70,7 @@ describe GearBox do
       end
 
       it 'shifts down' do
-        expect(shift_gear).to change(gear_box, :gear)
+        expect(shift_gear).to change(gear_box, :gear_number)
           .from(2).to(1)
       end
     end
@@ -74,7 +83,7 @@ describe GearBox do
       end
 
       it 'does not exceed the upper limit' do
-        expect(gear_box.gear).to eq(6)
+        expect(gear_box.gear_number).to eq(6)
       end
     end
 
@@ -86,7 +95,7 @@ describe GearBox do
       end
 
       it 'does not exceed the lower limit' do
-        expect(gear_box.gear).to eq(1)
+        expect(gear_box.gear_number).to eq(1)
       end
     end
   end
