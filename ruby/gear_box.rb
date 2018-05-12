@@ -27,20 +27,44 @@ class GearBox
   end
 
   def doit(rpm)
-    if gear < 0
-      # do nothing!
-    elsif gear > 0
-      if rpm > 2000
-        @gear += 1
-      elsif rpm < 500
-        @gear -= 1
-      end
+    if gear.zero?
+      start
+    elsif high_rpm?(rpm) && shift_up?
+      shift_up
+    elsif low_rpm?(rpm) && shift_down?
+      shift_down
+    else
+      # stay on current gear
     end
+  end
 
-    if gear > 6
-      @gear -= 1
-    elsif gear < 1
-      @gear += 1
-    end
+  private
+
+  def start
+    @gear = 1
+  end
+
+  def shift_up
+    @gear += 1
+  end
+
+  def shift_down
+    @gear -= 1
+  end
+
+  def high_rpm?(rpm)
+    rpm > 2000
+  end
+
+  def low_rpm?(rpm)
+    rpm < 500
+  end
+
+  def shift_up?
+    gear < 6
+  end
+
+  def shift_down?
+    gear > 1
   end
 end

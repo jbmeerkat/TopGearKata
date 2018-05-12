@@ -14,9 +14,28 @@ describe GearBox do
     end
 
     let(:gear_box) { described_class.new }
-    let(:rpm) { nil }
+
+    context 'without rpm' do
+      let(:rpm) { nil }
+
+      it 'starts' do
+        expect(shift_gear).to change(gear_box, :gear)
+          .from(0).to(1)
+      end
+    end
+
+    context 'when rpm is zero' do
+      let(:rpm) { 0 }
+
+      it 'starts' do
+        expect(shift_gear).to change(gear_box, :gear)
+          .from(0).to(1)
+      end
+    end
 
     context 'from 0 to 1' do
+      let(:rpm) { 1 }
+
       it 'shifts gear' do
         expect(shift_gear).to change(gear_box, :gear)
           .from(0).to(1)
