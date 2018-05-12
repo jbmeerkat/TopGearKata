@@ -33,5 +33,42 @@ describe GearBox do
           .from(1).to(2)
       end
     end
+
+    context 'from 2 to 1' do
+      let(:rpm) { 450 }
+
+      before do
+        2.times { gear_box.doit(2500) }
+      end
+
+      it 'shifts down' do
+        expect(shift_gear).to change(gear_box, :gear)
+          .from(2).to(1)
+      end
+    end
+
+    context 'when gear is greater than 6' do
+      let(:rpm) { 5_000 }
+
+      before do
+        10.times { shift_gear.() }
+      end
+
+      it 'does not exceed the upper limit' do
+        expect(gear_box.gear).to eq(6)
+      end
+    end
+
+    context 'when shifts down' do
+      let(:rpm) { 200 }
+
+      before do
+        10.times { shift_gear.() }
+      end
+
+      it 'does not exceed the lower limit' do
+        expect(gear_box.gear).to eq(1)
+      end
+    end
   end
 end
