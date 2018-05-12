@@ -30,21 +30,23 @@ class GearBox
     if @s < 0
       # do nothing!
       @e = i
-    else
-      if @s > 0
-        if i > 2000
-          @s += 1
-        elsif i < 500
-          @s -= 1
-        end
+    elsif @s > 0
+      if i > 2000
+        @s += 1
+      elsif i < 500
+        @s -= 1
       end
     end
-      
+
     if @s > 6
       @s -= 1
     elsif @s < 1
       @s += 1
     end
     @e = i
+  end
+
+  def gear
+    @s
   end
 end
