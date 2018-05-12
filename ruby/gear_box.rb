@@ -20,33 +20,27 @@
 # Your assignment is to make the gearbox accept a range of rpms for each gear (and
 # of course use that range to shift gears!)
 class GearBox
+  attr_reader :gear
 
   def initialize
-    @s = 0
-    @e = 0
+    @gear = 0
   end
 
-  def doit(i)
-    if @s < 0
+  def doit(rpm)
+    if gear < 0
       # do nothing!
-      @e = i
-    elsif @s > 0
-      if i > 2000
-        @s += 1
-      elsif i < 500
-        @s -= 1
+    elsif gear > 0
+      if rpm > 2000
+        @gear += 1
+      elsif rpm < 500
+        @gear -= 1
       end
     end
 
-    if @s > 6
-      @s -= 1
-    elsif @s < 1
-      @s += 1
+    if gear > 6
+      @gear -= 1
+    elsif gear < 1
+      @gear += 1
     end
-    @e = i
-  end
-
-  def gear
-    @s
   end
 end
